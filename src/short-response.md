@@ -1,6 +1,7 @@
 # Short Responses
 
 For this assessment, aim to write a response with the following qualities:
+
 - [ ] Addresses all parts of the prompt
 - [ ] Accurately uses relevant technical terminology
 - [ ] Is free of grammar and spelling mistakes
@@ -26,7 +27,7 @@ const getLetterGrade = (score) => {
   }
 
   return "Your grade is: " + letter;
-}
+};
 
 console.log(getLetterGrade(95)); // This should print "Your grade is: A"
 console.log(getLetterGrade(82)); // This should print "Your grade is: B"
@@ -42,11 +43,17 @@ console.log(getLetterGrade(65)); // This should print "Your grade is: F"
 
 **Part A:**
 
-Your response...
+The bug is occuring because of the use of let inside each if/else block.
+That second **let letter** creates a **new block-scoped variable** local to that **if block**, not the outer one.
+So the inner **letter** variables exist only **inside** the `{ ... }` where they were created.
+They do not update the outer **letter** variable.
+Therefore, the outer **letter** remains **undefined** the whole time.
+When you reach the return statement.
+To simplify, This is a bug caused by shadowing a variable with a new one of the same name inside a block.
 
 **Part B:**
 
-Your response...
+The way i would go about fixing this bug is by removing the extra let inside the if statements that you assign the existing variable instead creating new useless ones.
 
 ---
 
@@ -69,18 +76,31 @@ console.log(originalSettings.volume);
 
 **Part A:**
 
-Your response...
+The console will log **75**. In javascript objects are reference types.
+When you write:
+
+```js
+const newSettings = originalSettings;
+```
+
+You are not creating a new object.
+Instead, you are copying the reference (memory address) to the same object.
+That means **originalSettings** and **newSettings** both point to the exact same object in memory.
+So when you do:
+**newSettings.volume = 75;**
+you are modifying the shared object, not just **newSettings**.
+Thus, **originalSettings.volume** becomes **75** as well.
 
 **Part B:**
 
-Your response...
+To prevent modifying **originalSettings** you have to create a copy instead of modifying the reference. This can be done by making a shallow clone of the object using the spread operator
 
 **Corrected Code:**
 
 ```js
 // Fix this code so newSettings is a true copy
 const originalSettings = { volume: 50, brightness: 80 };
-const newSettings = originalSettings;
+const newSettings = { ...originalSettings };
 newSettings.volume = 75;
 console.log(originalSettings.volume);
 ```
@@ -90,6 +110,7 @@ console.log(originalSettings.volume);
 ## Prompt 3
 
 Given this array of products and the code using `filter`:
+
 ```js
 const products = [
   { name: "Laptop", price: 1000, inStock: true },
@@ -99,11 +120,12 @@ const products = [
 ];
 
 const itemsInStock = products.filter((product) => {
-  return product.inStock
+  return product.inStock;
 });
 ```
 
 Walk through what happens in the first iteration of filter:
+
 - What is the value of `product`?
 - What gets returned from the callback?
 - What happens with that returned value?
